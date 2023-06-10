@@ -1,7 +1,38 @@
-import React from "react";
+import React, { useReducer, useContext } from "react";
+import reducer from "../reducers/sidebar_reducer";
 
-const sidebar_context = () => {
-  return <div>sidebar_context</div>;
+import { OPEN_SIDEBAR, CLOSE_SIDEBAR } from "../action";
+
+const initialState = {
+  isSidebarOpen: false,
 };
 
-export default sidebar_context;
+const SidebarContext = React.createContext();
+
+export const SidebarProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const openSidebar = () => {
+    dispatch({ type: OPEN_SIDEBAR });
+  };
+
+  const closeSidebar = () => {
+    dispatch({ type: CLOSE_SIDEBAR });
+  };
+
+  return (
+    <SidebarContext.Provider
+      value={{
+        ...state,
+        openSidebar,
+        closeSidebar,
+      }}
+    >
+      {children}
+    </SidebarContext.Provider>
+  );
+};
+
+export const useSidebarContext = () => {
+  return useContext(SidebarContext);
+};
