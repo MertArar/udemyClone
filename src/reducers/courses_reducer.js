@@ -1,7 +1,28 @@
-import React from "react";
+import { GET_CATEGORIES, GET_COURSES, GET_SINGLE_COURSE } from "../action";
 
-const courses_reducer = () => {
-  return <div>courses_reducer</div>;
+const courses_reducer = (state, action) => {
+  if (action.type === GET_COURSES) {
+    return {
+      ...state,
+      courses: action.payload,
+    };
+  }
+
+  if (action.type === GET_SINGLE_COURSE) {
+    return {
+      ...state,
+      single_course: action.payload,
+    };
+  }
+
+  if (action.type === GET_CATEGORIES) {
+    return {
+      ...state,
+      categoires: action.payload,
+    };
+  }
+
+  throw new Error(`No matching "${action.type}" - action type`);
 };
 
 export default courses_reducer;

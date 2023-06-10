@@ -1,7 +1,56 @@
-import React from "react";
+import {
+  ADD_TO_CART,
+  REMOVE_CART_ITEM,
+  CLEAR_CART,
+  GET_CART_TOTAL,
+} from "../action";
 
-const cart_reducer = () => {
-  return <div>cart_reducer</div>;
+const cart_reducer = (state, action) => {
+  if (action.type === ADD_TO_CART) {
+    const tempArr = state.cart.filter(
+      (item) => item.courseID === action.payload.courseID
+    );
+    if (tempArr.lenght < 1) {
+      return {
+        ...state,
+        cart: [...state.cart, action.payload],
+      };
+    }
+    return {
+      ...state,
+    };
+  }
+
+  if (action.type === REMOVE_CART_ITEM) {
+    const tempCart = state.cart.filter(
+      (item) => item.courseID !== action.payload
+    );
+    return {
+      ...state,
+      cart: tempCart,
+    };
+  }
+
+  if (action.type === GET_CART_TOTAL) {
+    const total_amount = state.cart.reduce((total, cartItem) => {
+      total += cartItem.discounted_price;
+      return total;
+    }, 0);
+    return {
+      ...state,
+      total_items: state.cart.lenght,
+      total_amount,
+    };
+  }
+
+  if (action.type === CLEAR_CART) {
+    return {
+      ...state,
+      cart: [],
+    };
+  }
+
+  throw new Error(`No Matching "${action.type}" - action type`);
 };
 
 export default cart_reducer;
